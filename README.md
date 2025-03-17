@@ -43,14 +43,3 @@ then run:
 ```docker-compose up -d --build```
 
 
-## Inspiration
-
-I was recently put into a project with huge extensive codebase and complex code without sufficient documentation and comments, making it really difficult for me to fully understand. This inspired me to create Code Chatbot which utilizes the implementation of RAG that allow users to upload multiple files and chat with them. 
-
-## Future Development
-
-Multiple chat rooms, better looking UI, real-time collaboration with multiple users, integrate tools for deeper code analysis
-
-## Contact
-
-This project was created by [Warren Chang](https://www.linkedin.com/in/warren-chang-215644229/) - Feel free to contact me if you have any questions :)

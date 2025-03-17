@@ -8,7 +8,10 @@ const { askQuestion } = require('./askHandler');
 const { Pinecone } = require('@pinecone-database/pinecone');
 const fs = require('fs');
 const path = require('path');
+
+
 dotenv.config();
+
 const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
 
 const pc = new Pinecone({
@@ -28,15 +31,21 @@ app.use(cors({
   }));
 app.use(express.json());
 
+
+
 // File Upload Endpoint
 app.post('/upload', upload.array('files'), async (req, res) => {
   try {
-    const files = req.files;
-    await processFiles(files);
-    res.status(200).send({ message: 'Files uploaded and processed successfully.' });
+      const files = req.files;
+      if (!files || files.length === 0) {
+          return res.status(400).send({ error: 'No files uploaded' });
+      }
+
+      await processFiles(files);
+      res.status(200).send({ message: 'Files uploaded and processed successfully.' });
   } catch (error) {
-    console.error('Error processing files:', error);
-    res.status(500).send({ error: 'File processing failed.' });
+      console.error('Error processing files:', error);
+      res.status(500).send({ error: 'File processing failed.' });
   }
 });
 

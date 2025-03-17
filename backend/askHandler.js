@@ -27,7 +27,7 @@ const askQuestion = async (question) => {
         apiKey: PINECONE_API_KEY
       });
     
-    const index = pc.Index('code-embeddings'); 
+    const index = pc.Index('rag-embedding'); 
 
   const questionEmbedding = await generateEmbedding(question);
 
@@ -39,10 +39,10 @@ const askQuestion = async (question) => {
 
   const relevantSnippets = queryResponse.matches.map(match => match.metadata.content).join('\n\n');
 
-  const prompt = `
-You are an assistant that helps understand and explain code.
+  let prompt = `
+You are an reporter help me to understand on the document.
 
-Relevant Code Snippets:
+Relevant news Snippets:
 ${relevantSnippets}
 
 User Question:
@@ -50,8 +50,14 @@ ${question}
 
 Answer:
 `;
-
-  const gptResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
+//input prompt have limitation
+if (prompt.length > 10000) {
+  console.warn("Trimming input to avoid exceeding token limit.");
+  prompt = prompt.substring(0, 10000);
+}
+console.log("prompt",prompt);
+  
+const gptResponse = await axios.post('https://api.openai.com/v1/chat/completions', {
     model: 'gpt-4',
     messages: [{ role: 'user', content: prompt }],
     max_tokens: 5000
